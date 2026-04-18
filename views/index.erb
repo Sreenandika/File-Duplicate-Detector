@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DupeScan - Duplicate File Finder</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DupeScan</h1>
+            <p>Find and clean duplicate files instantly</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <% if @error %>
+                    <div class="alert alert-error">
+                        <%= @error %>
+                    </div>
+                <% end %>
+
+                <form action="/scan" method="POST">
+                    <div class="form-group">
+                        <label for="path">Folder Path</label>
+                        <input type="text" id="path" name="path" placeholder="e.g. C:\Users\Documents or /home/user/pics" required value="<%= params[:path] %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-group">
+                            <input type="checkbox" name="recursive" value="1" <%= params[:recursive] ? 'checked' : '' %>>
+                            Include subfolders (recursive scan)
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-block">Scan Now</button>
+                </form>
+            </div>
+
+            <div class="card" style="text-align: center; border-left: 5px solid #2980b9;">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                    <strong>Tip:</strong> DupeScan uses MD5 hashing to ensure files are identical even if they have different names.
+                </p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

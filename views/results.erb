@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - DupeScan</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Scan Results</h1>
+            <p>Scanning: <strong><%= @path %></strong></p>
+        </header>
+
+        <main>
+            <div class="summary-grid">
+                <div class="stat-card">
+                    <span class="stat-value"><%= @total_files %></span>
+                    <span class="stat-label">Files Scanned</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value"><%= @duplicates.size %></span>
+                    <span class="stat-label">Duplicate Groups</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value"><%= '%.2f' % @wasted_space_mb %> MB</span>
+                    <span class="stat-label">Wasted Space</span>
+                </div>
+            </div>
+
+            <% if @duplicates.empty? %>
+                <div class="alert alert-success">
+                    <h3>No duplicates found!</h3>
+                    <p>Your folder is clean.</p>
+                </div>
+            <% else %>
+                <% @duplicates.each_with_index do |(hash, files), index| %>
+                    <div class="card group-card">
+                        <div class="group-header">
+                            <div>
+                                <span class="badge">Group #<%= index + 1 %></span>
+                                <span style="margin-left: 10px; font-weight: 600;"><%= '%.2f' % (files.first[:size] / 1024.0 / 1024.0) %> MB each</span>
+                            </div>
+                            <span class="badge" style="background: #34495e;"><%= files.size %> copies</span>
+                        </div>
+                        <ul class="file-list">
+                            <% files.each do |file| %>
+                                <li class="file-item">
+                                    <span class="file-name"><%= file[:name] %></span>
+                                    <span class="file-path" title="<%= file[:path] %>"><%= file[:path] %></span>
+                                </li>
+                            <% end %>
+                        </ul>
+                    </div>
+                <% end %>
+            <% end %>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="/" class="btn btn-secondary">Scan Another Folder</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
